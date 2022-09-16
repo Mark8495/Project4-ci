@@ -7,19 +7,44 @@ STATUS = ((0, "Draft"), (1, "Published"))
 
 
 
+class Preptime(models.Model):
+    "Django Model of Preparation time database"
+    preptime_image = CloudinaryField("preptime", blank=True)
+    title = models.CharField(max_length=250,default='placeholder', unique=True, null=True)
+    slug = models.SlugField(max_length=250,default='placeholder', unique=True, null=True)
+
+    def __str__(self):
+        return self.title
+
+
+
+class Mealtime(models.Model):
+    "Django Model of Preparation time database"
+    title = models.CharField(max_length=250, default='breakfast', unique=True, null=True)
+    slug = models.SlugField(max_length=250, default='breakfast', unique=True, null=True)
+    mealtime_image = CloudinaryField("mealtime", blank=True)
+
+    def __str__(self):
+        return self.title
+
+    
+
+
+
 class Recipe(models.Model):
+    " Django Model of recipe database "
     title = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200, unique=True)
-    # preptime = models.ForeignKey(
-    #     Preptime,
-    #     on_delete=models.CASCADE,
-    #     related_name="recipe_posts"
-    # )
-    # mealtime = models.ForeignKey(
-    #     Mealtime,
-    #     on_delete=models.CASCADE,
-    #     related_name="recipe_posts"
-    # )
+    preptime = models.ForeignKey(
+        Preptime,
+        on_delete=models.CASCADE,
+        related_name="recipe_posts"
+    )
+    mealtime = models.ForeignKey(
+        Mealtime,
+        on_delete=models.CASCADE,
+        related_name="recipe_posts"
+    )
     author = models.ForeignKey(
         User, 
         on_delete=models.CASCADE, 
@@ -47,6 +72,7 @@ class Recipe(models.Model):
         return self.likes.count()
 
 class Comment(models.Model):
+    "Comments Model"
     post = models.ForeignKey(Recipe, on_delete=models.CASCADE,
                              related_name="comments")
     name = models.CharField(max_length=80)

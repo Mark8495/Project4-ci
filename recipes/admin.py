@@ -1,9 +1,31 @@
 from django.contrib import admin
-from .models import Recipe, Comment
+from .models import Recipe, Comment, Preptime, Mealtime
 from django_summernote.admin import SummernoteModelAdmin
 
 
-@admin.register(Post)
+
+@admin.register(Preptime)
+class PreptimeAdmin(admin.ModelAdmin):
+    """
+    Ability to manage categories in admin
+    """
+    list_display = ('title', 'slug')
+    prepopulated_fields = {'slug': ('title',)}
+    search_fields = ('title',)
+
+
+
+@admin.register(Mealtime)
+class MealtimeAdmin(admin.ModelAdmin):
+    """
+    Ability to manage categories in admin
+    """
+    list_display = ('title', 'slug')
+    prepopulated_fields = {'slug': ('title',)}
+    search_fields = ('title',)
+
+
+@admin.register(Recipe)
 class PostAdmin(SummernoteModelAdmin):
 
     list_display = ('title', 'slug', 'status', 'created_on')
